@@ -2,17 +2,15 @@ import module from '../../module'
 
 export default name => {
   const root = `${module.code}/${name}/`
-  const crud = $http.crud(root)
   const urls = {
-    select: root + 'Select'
+    get: root + 'Get'
   }
 
-  const select = () => {
-    return $http.get(urls.select)
+  const get = () => {
+    return $http.get(urls.get)
   }
 
   return {
-    ...crud,
-    select
+    get
   }
 }

@@ -1,67 +1,38 @@
-using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NetModular.Lib.Auth.Web.Attributes;
-using NetModular.Lib.Utils.Core.Result;
-using NetModular.Module.PersonnelFiles.Application.CompanyService;
-using NetModular.Module.PersonnelFiles.Application.CompanyService.ViewModels;
-using NetModular.Module.PersonnelFiles.Domain.Company.Models;
+using NetModular.Lib.Config.Abstractions;
+using NetModular.Module.PersonnelFiles.Infrastructure;
 
 namespace NetModular.Module.PersonnelFiles.Web.Controllers
 {
-    [Description("公司单位管理")]
+    /// <summary>
+    /// 公司单位
+    /// </summary>
     public class CompanyController : ModuleController
     {
-        private readonly ICompanyService _service;
+        private readonly IConfigProvider _configProvider;
 
-        public CompanyController(ICompanyService service)
+        public CompanyController(IConfigProvider configProvider)
         {
-            _service = service;
+            _configProvider = configProvider;
         }
 
         [HttpGet]
-        [Description("查询")]
-        public Task<IResultModel> Query([FromQuery] CompanyQueryModel model)
-        {
-            return _service.Query(model);
-        }
-
-        [HttpPost]
-        [Description("添加")]
-        public Task<IResultModel> Add(CompanyAddModel model)
-        {
-            return _service.Add(model);
-        }
-
-        [HttpDelete]
-        [Description("删除")]
-        public async Task<IResultModel> Delete([BindRequired] Guid id)
-        {
-            return await _service.Delete(id);
-        }
-
-        [HttpGet]
-        [Description("编辑")]
-        public async Task<IResultModel> Edit([BindRequired] Guid id)
-        {
-            return await _service.Edit(id);
-        }
-
-        [HttpPost]
-        [Description("修改")]
-        public Task<IResultModel> Update(CompanyUpdateModel model)
-        {
-            return _service.Update(model);
-        }
-
-        [HttpGet]
-        [Description("下拉列表")]
+        [Description("获取公司单位信息")]
         [Common]
-        public async Task<IResultModel> Select()
+        public IResultModel Get()
         {
-            return await _service.Select();
+            var config = _configProvider.Get<PersonnelFilesConfig>();
+            var company = new
+            {
+                Name = config.CompanyName,
+                Address = config.CompanyAddress,
+                Contact = config.CompanyContact,
+                Phone = config.CompanyPhone,
+                Fax = config.CompanyFax
+            };
+            return ResultModel.Success(company);
         }
     }
 }

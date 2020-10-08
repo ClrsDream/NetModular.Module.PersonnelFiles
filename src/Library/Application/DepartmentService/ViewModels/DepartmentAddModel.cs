@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace NetModular.Module.PersonnelFiles.Application.DepartmentService.ViewModels
 {
@@ -8,29 +9,24 @@ namespace NetModular.Module.PersonnelFiles.Application.DepartmentService.ViewMod
     public class DepartmentAddModel
     {
         /// <summary>
-        /// 公司编号
-        /// </summary>
-        public Guid CompanyId { get; set; }
-
-        /// <summary>
         /// 父节点
         /// </summary>
-        public Guid? ParentId { get; set; }
+        public Guid ParentId { get; set; }
 
         /// <summary>
         /// 名称
         /// </summary>
+        [Required(ErrorMessage = "请输入部门名称")]
         public string Name { get; set; }
 
         /// <summary>
-        /// 负责人
+        /// 编码
         /// </summary>
-        public Guid? Leader { get; set; }
+        public string Code { get; set; }
 
         /// <summary>
         /// 排序
         /// </summary>
         public int Sort { get; set; }
-
     }
 }
